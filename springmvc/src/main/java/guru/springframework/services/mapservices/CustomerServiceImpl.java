@@ -1,15 +1,18 @@
-package guru.springframework.services;
+package guru.springframework.services.mapservices;
 
 import java.util.HashMap;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import guru.springframework.domain.Customer;
+import guru.springframework.services.CustomerService;
 
 /**
  * Created by jt on 11/14/15.
  */
 @Service
+@Profile("map")
 public class CustomerServiceImpl extends AbstractMapService implements CustomerService {
 
 	// @Override

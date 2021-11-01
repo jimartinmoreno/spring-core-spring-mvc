@@ -1,23 +1,20 @@
-package guru.springframework.services;
+package guru.springframework.services.mapservices;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import guru.springframework.domain.Product;
+import guru.springframework.services.ProductService;
 
 /**
  * Created by jt on 11/6/15.
  */
 @Service
+@Profile("map")
 public class ProductServiceImpl extends AbstractMapService implements ProductService {
-//public class ProductServiceImpl extends AbstractMapService{
-
-	// @Override
-	// public List<DomainObject> listAll() {
-	// return super.listAll();
-	// }
 
 	@Override
 	public Product getById(Integer id) {

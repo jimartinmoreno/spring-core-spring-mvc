@@ -15,7 +15,7 @@ import guru.springframework.services.ProductService;
  * Created by jt on 11/6/15.
  */
 @Controller
-@RequestMapping("/productr")
+@RequestMapping("/product")
 public class ProductController {
 
 	private ProductService productService;
