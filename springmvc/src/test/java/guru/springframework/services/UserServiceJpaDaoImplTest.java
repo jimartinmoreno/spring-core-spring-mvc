@@ -23,7 +23,7 @@ import guru.springframework.domain.User;
 @Profile(value = { "jpadaotest", "jpadao" }) // Se ejecuta si usamos el perfil "jpadaotest" y "jpadao"
 class UserServiceJpaDaoImplTest {
 
-	private UserService userService;
+	//private UserService userService;
 	private ProductService productService;
 
 	private CustomerService customerService;
@@ -33,10 +33,10 @@ class UserServiceJpaDaoImplTest {
 		this.customerService = customerService;
 	}
 
-	@Autowired
-	public void setUserService(UserService userService) {
-		this.userService = userService;
-	}
+	// @Autowired
+	// public void setUserService(UserService userService) {
+	// this.userService = userService;
+	// }
 
 	@Autowired
 	public void setProductService(ProductService productService) {

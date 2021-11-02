@@ -1,7 +1,9 @@
 package guru.springframework.controller;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -29,6 +31,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import guru.springframework.controllers.CustomerController;
+import guru.springframework.domain.Address;
 import guru.springframework.domain.Customer;
 import guru.springframework.services.CustomerService;
 
@@ -81,8 +84,10 @@ class CustomerControllerTest {
 
 		when(customerService.getById(id)).thenReturn(new Customer());
 
-		mockMvc.perform(get("/customer/show/1")).andExpect(status().isOk()).andExpect(view().name("customer/show"))
-				.andExpect(model().attribute("customer", instanceOf(Customer.class)));
+		mockMvc.perform(get("/customer/show/1"))
+			.andExpect(status().isOk())
+			.andExpect(view().name("customer/show"))
+			.andExpect(model().attribute("customer", instanceOf(Customer.class)));
 	}
 
 	@Test
@@ -91,17 +96,20 @@ class CustomerControllerTest {
 
 		when(customerService.getById(id)).thenReturn(new Customer());
 
-		mockMvc.perform(get("/customer/edit/1")).andExpect(status().isOk())
-				.andExpect(view().name("customer/customerform"))
-				.andExpect(model().attribute("customer", instanceOf(Customer.class)));
+		mockMvc.perform(get("/customer/edit/1"))
+			.andExpect(status().isOk())
+			.andExpect(view().name("customer/customerform"))
+			.andExpect(model().attribute("customer", instanceOf(Customer.class)));
 	}
 
 	@Test
 	void testNewCustomer() throws Exception {
 		verifyNoInteractions(customerService);
 
-		mockMvc.perform(get("/customer/new")).andExpect(status().isOk()).andExpect(view().name("customer/customerform"))
-				.andExpect(model().attribute("customer", instanceOf(Customer.class)));
+		mockMvc.perform(get("/customer/new"))
+			.andExpect(status().isOk())
+			.andExpect(view().name("customer/customerform"))
+			.andExpect(model().attribute("customer", instanceOf(Customer.class)));
 	}
 
 	@Test
@@ -121,44 +129,46 @@ class CustomerControllerTest {
 		returnCustomer.setId(id);
 		returnCustomer.setFirstName(firstName);
 		returnCustomer.setLastName(lastName);
-		returnCustomer.setAddressLine1(addressLine1);
-		returnCustomer.setAddressLine2(addressLine2);
-		returnCustomer.setCity(city);
-		returnCustomer.setState(state);
-		returnCustomer.setZipCode(zipCode);
+		returnCustomer.setBillingAddress(new Address());
+		returnCustomer.getBillingAddress().setAddressLine1(addressLine1);
+		returnCustomer.getBillingAddress().setAddressLine2(addressLine2);
+		returnCustomer.getBillingAddress().setCity(city);
+		returnCustomer.getBillingAddress().setState(state);
+		returnCustomer.getBillingAddress().setZipCode(zipCode);
 		returnCustomer.setEmail(email);
 		returnCustomer.setPhoneNumber(phoneNumber);
 
 		when(customerService.saveOrUpdate(any(Customer.class))).thenReturn(returnCustomer);
 
 		mockMvc.perform(post("/customer")
-							.param("id", "1")
-							.param("firstName", firstName)
-							.param("lastName", lastName)
-							.param("addressLine1", addressLine1)
-							.param("addressLine2", addressLine2)
-							.param("city", city)
-							.param("state", state)
-							.param("zipCode", zipCode)
-							.param("email", email)
-							.param("phoneNumber", phoneNumber)
-							)
+				.param("id", "1")
+				.param("firstName", firstName)
+				.param("lastName", lastName)
+				.param("billingAddress.addressLine1", addressLine1)
+				.param("billingAddress.addressLine2", addressLine2)
+				.param("billingAddress.city", city)
+				.param("billingAddress.state", state)
+				.param("billingAddress.zipCode", zipCode)
+				.param("email", email)
+				.param("phoneNumber", phoneNumber))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:customer/show/1"))
 				.andExpect(model().attribute("customer", instanceOf(Customer.class)))
 				.andExpect(model().attribute("customer", hasProperty("firstName", is(firstName))))
 				.andExpect(model().attribute("customer", hasProperty("lastName", is(lastName))))
-				.andExpect(model().attribute("customer", hasProperty("addressLine1", is(addressLine1))))
-				.andExpect(model().attribute("customer", hasProperty("addressLine2", is(addressLine2))))
-				.andExpect(model().attribute("customer", hasProperty("city", is(city))))
-				.andExpect(model().attribute("customer", hasProperty("state", is(state))))
-				.andExpect(model().attribute("customer", hasProperty("zipCode", is(zipCode))))
+				.andExpect(model().attribute("customer", hasProperty("billingAddress", notNullValue())))
+				.andExpect(model().attribute("customer", hasProperty("billingAddress", hasProperty("addressLine1", equalTo(addressLine1)))))
+                .andExpect(model().attribute("customer", hasProperty("billingAddress", hasProperty("addressLine2", is(addressLine2)))))
+                .andExpect(model().attribute("customer", hasProperty("billingAddress", hasProperty("city", is(city)))))
+                .andExpect(model().attribute("customer", hasProperty("billingAddress", hasProperty("state", is(state)))))
+                .andExpect(model().attribute("customer", hasProperty("billingAddress", hasProperty("zipCode", is(zipCode)))))
 				.andExpect(model().attribute("customer", hasProperty("email", is(email))))
 				.andExpect(model().attribute("customer", hasProperty("phoneNumber", is(phoneNumber))));
 
-		
+		System.out.println(model());
 		/**
-		 * Intercepta el objecto que se le pasa al controller en este test es "returnCustomer"
+		 * Intercepta el objecto que se le pasa al controller en este test es
+		 * "returnCustomer"
 		 */
 		ArgumentCaptor<Customer> customerCaptor = ArgumentCaptor.forClass(Customer.class);
 		verify(customerService).saveOrUpdate(customerCaptor.capture());
@@ -168,11 +178,11 @@ class CustomerControllerTest {
 		assertEquals(id, boundCustomer.getId());
 		assertEquals(firstName, boundCustomer.getFirstName());
 		assertEquals(lastName, boundCustomer.getLastName());
-		assertEquals(addressLine1, boundCustomer.getAddressLine1());
-		assertEquals(addressLine2, boundCustomer.getAddressLine2());
-		assertEquals(city, boundCustomer.getCity());
-		assertEquals(state, boundCustomer.getState());
-		assertEquals(zipCode, boundCustomer.getZipCode());
+		assertEquals(addressLine1, boundCustomer.getBillingAddress().getAddressLine1());
+		assertEquals(addressLine2, boundCustomer.getBillingAddress().getAddressLine2());
+		assertEquals(city, boundCustomer.getBillingAddress().getCity());
+		assertEquals(state, boundCustomer.getBillingAddress().getState());
+		assertEquals(zipCode, boundCustomer.getBillingAddress().getZipCode());
 		assertEquals(email, boundCustomer.getEmail());
 		assertEquals(phoneNumber, boundCustomer.getPhoneNumber());
 	}

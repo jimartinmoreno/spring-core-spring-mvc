@@ -5,25 +5,15 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.Version;
 
 /**
  * Created by jt on 12/15/15.
  */
 @Entity
-public class Cart implements DomainObject {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
-
-	@Version
-	private Integer version;
+public class Cart extends AbstractDomainClass {
 
 	// Relación one to one bidireccional
 	@OneToOne
@@ -35,26 +25,8 @@ public class Cart implements DomainObject {
 	 * entities.
 	 */
 	// Relación one to many bidireccional
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "cart", orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "cart", orphanRemoval = true, fetch = FetchType.EAGER)
 	private List<CartDetail> cartDetails = new ArrayList<>();
-
-	@Override
-	public Integer getId() {
-		return id;
-	}
-
-	@Override
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public Integer getVersion() {
-		return version;
-	}
-
-	public void setVersion(Integer version) {
-		this.version = version;
-	}
 
 	public User getUser() {
 		return user;
@@ -80,5 +52,11 @@ public class Cart implements DomainObject {
 	public void removeCartDetail(CartDetail cartDetail) {
 		cartDetail.setCart(null);
 		this.cartDetails.remove(cartDetail);
+	}
+
+	@Override
+	public String toString() {
+		return "Cart [cartDetails=" + cartDetails + ", id=" + id + ", version=" + version + ", dateCreated="
+				+ dateCreated + ", lastUpdated=" + lastUpdated + "]";
 	}
 }

@@ -2,23 +2,12 @@ package guru.springframework.domain;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
-import javax.persistence.Version;
 
 @Entity
-public class User implements DomainObject {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
-
-	@Version
-	private Integer version;
+public class User extends AbstractDomainClass {
 
 	private String username;
 
@@ -30,35 +19,19 @@ public class User implements DomainObject {
 
 	@OneToOne
 	@MapsId
-	// Relación one to one  bidireccional
+	// Relación one to one bidireccional
 	private Customer customer;
 
 	/**
-	 * orphanRemoval = true (Optional) Whether to apply the remove operation to entities that have been
-	 * removed from the relationship and to cascade the remove operation to those
-	 * entities.
+	 * orphanRemoval = true (Optional) Whether to apply the remove operation to
+	 * entities that have been removed from the relationship and to cascade the
+	 * remove operation to those entities.
 	 */
 	// Relación one to one bidireccional
-	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+	//@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+	// Relación one to one bidireccional
+	@OneToOne(cascade = { CascadeType.ALL }, orphanRemoval = true)
 	private Cart cart;
-
-	@Override
-	public Integer getId() {
-		return id;
-	}
-
-	@Override
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public Integer getVersion() {
-		return version;
-	}
-
-	public void setVersion(Integer version) {
-		this.version = version;
-	}
 
 	public String getUsername() {
 		return username;
@@ -110,8 +83,9 @@ public class User implements DomainObject {
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", version=" + version + ", username=" + username + ", password=" + password
-				+ ", encryptedPassword=" + encryptedPassword + ", enabled=" + enabled + "]";
+		return "User [username=" + username + ", password=" + password + ", encryptedPassword=" + encryptedPassword
+				+ ", enabled=" + enabled + ", cart=" + cart + ", id=" + id + ", version=" + version + ", dateCreated="
+				+ dateCreated + ", lastUpdated=" + lastUpdated + "]";
 	}
 
 }

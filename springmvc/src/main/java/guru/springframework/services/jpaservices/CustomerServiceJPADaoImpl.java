@@ -3,8 +3,6 @@ package guru.springframework.services.jpaservices;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -17,14 +15,8 @@ import guru.springframework.services.security.EncryptionService;
 
 @Service
 @Profile(value = { "jpadao", "jpadaotest" })
-public class CustomerServiceJPADaoImpl implements CustomerService {
-	private EntityManagerFactory emf;
-
-	@PersistenceUnit
-	public void setEmf(EntityManagerFactory emf) {
-		this.emf = emf;
-	}
-
+public class CustomerServiceJPADaoImpl extends AbstractJpaDaoService implements CustomerService {
+	
 	private EncryptionService encryptionService;
 
 	@Autowired
@@ -37,13 +29,14 @@ public class CustomerServiceJPADaoImpl implements CustomerService {
 		EntityManager em = emf.createEntityManager();
 		List<Customer> custList = em.createQuery("from Customer", Customer.class).getResultList();
 		em.close();
-		
+
 		// Predicate<Customer> p1 = (cust) -> cust.getPhoneNumber() != null;
 		//
 		// custList.stream().filter(cust -> cust.getPhoneNumber() !=
 		// null).collect(Collectors.toMap(Customer::getId, cust -> cust));
-		// custList.stream().filter(cust -> cust.getPhoneNumber() != null).collect(Collectors.toMap(Customer::getId, Function.identity()));
-		
+		// custList.stream().filter(cust -> cust.getPhoneNumber() !=
+		// null).collect(Collectors.toMap(Customer::getId, Function.identity()));
+
 		return custList;
 	}
 

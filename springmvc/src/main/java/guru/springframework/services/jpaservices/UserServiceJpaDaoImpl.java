@@ -3,8 +3,6 @@ package guru.springframework.services.jpaservices;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -16,14 +14,7 @@ import guru.springframework.services.security.EncryptionService;
 
 @Service
 @Profile(value = { "jpadao", "jpadaotest" })
-public class UserServiceJpaDaoImpl implements UserService {
-
-	private EntityManagerFactory emf;
-
-	@PersistenceUnit
-	public void setEmf(EntityManagerFactory emf) {
-		this.emf = emf;
-	}
+public class UserServiceJpaDaoImpl extends AbstractJpaDaoService implements UserService {
 
 	private EncryptionService encryptionService;
 
@@ -35,7 +26,7 @@ public class UserServiceJpaDaoImpl implements UserService {
 	@Override
 	public List<User> listAll() {
 		EntityManager em = emf.createEntityManager();
-		List<User> users = em.createQuery("from User", User.class).getResultList(); 
+		List<User> users = em.createQuery("from User", User.class).getResultList();
 		em.close();
 		return users;
 	}

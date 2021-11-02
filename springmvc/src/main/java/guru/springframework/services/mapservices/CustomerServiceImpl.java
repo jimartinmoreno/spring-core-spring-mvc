@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import guru.springframework.domain.Address;
 import guru.springframework.domain.Customer;
 import guru.springframework.services.CustomerService;
 
@@ -43,10 +44,11 @@ public class CustomerServiceImpl extends AbstractMapService implements CustomerS
 		customer1.setId(1);
 		customer1.setFirstName("Micheal");
 		customer1.setLastName("Weston");
-		customer1.setAddressLine1("1 Main St");
-		customer1.setCity("Miami");
-		customer1.setState("Florida");
-		customer1.setZipCode("33101");
+		customer1.setBillingAddress(new Address());
+		customer1.getBillingAddress().setAddressLine1("1 Main St");
+		customer1.getBillingAddress().setCity("Miami");
+		customer1.getBillingAddress().setState("Florida");
+		customer1.getBillingAddress().setZipCode("33101");
 		customer1.setEmail("micheal@burnnotice.com");
 		customer1.setPhoneNumber("305.333.0101");
 
@@ -54,10 +56,11 @@ public class CustomerServiceImpl extends AbstractMapService implements CustomerS
 		customer2.setId(2);
 		customer2.setFirstName("Fiona");
 		customer2.setLastName("Glenanne");
-		customer2.setAddressLine1("1 Key Biscane Ave");
-		customer2.setCity("Miami");
-		customer2.setState("Florida");
-		customer2.setZipCode("33101");
+		customer2.setBillingAddress(new Address());
+		customer2.getBillingAddress().setAddressLine1("1 Main St");
+		customer2.getBillingAddress().setCity("Miami");
+		customer2.getBillingAddress().setState("Florida");
+		customer2.getBillingAddress().setZipCode("33101");
 		customer2.setEmail("fiona@burnnotice.com");
 		customer2.setPhoneNumber("305.323.0233");
 
@@ -65,10 +68,11 @@ public class CustomerServiceImpl extends AbstractMapService implements CustomerS
 		customer3.setId(3);
 		customer3.setFirstName("Sam");
 		customer3.setLastName("Axe");
-		customer3.setAddressLine1("1 Little Cuba Road");
-		customer3.setCity("Miami");
-		customer3.setState("Florida");
-		customer3.setZipCode("33101");
+		customer3.setBillingAddress(new Address());
+        customer3.getBillingAddress().setAddressLine1("1 Little Cuba Road");
+        customer3.getBillingAddress().setCity("Miami");
+        customer3.getBillingAddress().setState("Florida");
+        customer3.getBillingAddress().setZipCode("33101");
 		customer3.setEmail("sam@burnnotice.com");
 		customer3.setPhoneNumber("305.426.9832");
 

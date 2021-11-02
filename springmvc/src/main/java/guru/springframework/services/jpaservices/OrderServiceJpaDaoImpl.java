@@ -7,38 +7,38 @@ import javax.persistence.EntityManager;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import guru.springframework.domain.Product;
-import guru.springframework.services.ProductService;
+import guru.springframework.domain.Order;
+import guru.springframework.services.OrderService;
 
 /**
- * @Service Indicates that an annotated class is a "Service"
+ * Created by jt on 12/16/15.
  */
 @Service
 @Profile(value = { "jpadao", "jpadaotest" })
-public class ProductServiceJpaDaoImpl extends AbstractJpaDaoService implements ProductService {
+public class OrderServiceJpaDaoImpl extends AbstractJpaDaoService implements OrderService {
 
 	@Override
-	public List<Product> listAll() {
-		// Se crea uno por cada thread. No es thread safe
+	public List<Order> listAll() {
 		EntityManager em = emf.createEntityManager();
-		List<Product> prodList = em.createQuery("from Product", Product.class).getResultList();
+		List<Order> orderList = em.createQuery("from Order", Order.class).getResultList();
 		em.close();
-		return prodList;
+		return orderList;
 	}
 
 	@Override
-	public Product getById(Integer id) {
+	public Order getById(Integer id) {
 		EntityManager em = emf.createEntityManager();
-		Product p = em.find(Product.class, id);
+		Order order = em.find(Order.class, id);
 		em.close();
-		return p;
+		return order;
 	}
 
 	@Override
-	public Product saveOrUpdate(Product domainObject) {
+	public Order saveOrUpdate(Order domainObject) {
 		EntityManager em = emf.createEntityManager();
+
 		em.getTransaction().begin();
-		Product savedProduct = em.merge(domainObject);
+		Order savedProduct = em.merge(domainObject);
 		em.getTransaction().commit();
 		em.close();
 		return savedProduct;
@@ -49,7 +49,7 @@ public class ProductServiceJpaDaoImpl extends AbstractJpaDaoService implements P
 		EntityManager em = emf.createEntityManager();
 
 		em.getTransaction().begin();
-		em.remove(em.find(Product.class, id));
+		em.remove(em.find(Order.class, id));
 		em.getTransaction().commit();
 		em.close();
 	}

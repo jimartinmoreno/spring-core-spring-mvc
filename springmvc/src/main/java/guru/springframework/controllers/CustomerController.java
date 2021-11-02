@@ -56,6 +56,7 @@ public class CustomerController {
 	public String saveOrUpdate(Customer customer) {
 		System.out.println("saveOrUpdate: " + customer);
 		Customer newCustomer = customerService.saveOrUpdate(customer);
+		System.out.println("saveOrUpdate: " + newCustomer);
 		return "redirect:customer/show/" + newCustomer.getId();
 	}
 

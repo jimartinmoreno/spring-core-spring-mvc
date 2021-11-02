@@ -1,38 +1,26 @@
 package guru.springframework.domain;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.OneToOne;
-import javax.persistence.Version;
 
 /**
  * Created by jt on 11/14/15.
  */
 @Entity
-public class Customer implements DomainObject {
-	@Id
-	/**
-	 * @GeneratedValue Provides for the specification of generation strategies for
-	 *                 the values of primary keys.
-	 */
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
-
-	@Version
-	private Integer version;
+public class Customer extends AbstractDomainClass {
 
 	private String firstName;
 	private String lastName;
 	private String email;
 	private String phoneNumber;
-	private String addressLine1;
-	private String addressLine2;
-	private String city;
-	private String state;
-	private String zipCode;
+
+	@Embedded
+	private Address billingAddress;
+
+//	@Embedded
+//	private Address shippingAddress;
 
 	/**
 	 * @OneToOne Specifies a single-valued association to another entity that has
@@ -50,19 +38,9 @@ public class Customer implements DomainObject {
 	 */
 	// Relación one to one bidireccional
 	@OneToOne(mappedBy = "customer", cascade = { CascadeType.ALL }, orphanRemoval = true)
-	//@JoinColumn(name = "user_id", referencedColumnName = "id")
+	// @JoinColumn(name = "user_id", referencedColumnName = "id")
 	private User user; // The primary owner of the relationship is the user so we don't want any
 						// cascade from the customer side
-
-	@Override
-	public Integer getId() {
-		return id;
-	}
-
-	@Override
-	public void setId(Integer id) {
-		this.id = id;
-	}
 
 	public String getFirstName() {
 		return firstName;
@@ -96,53 +74,21 @@ public class Customer implements DomainObject {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public String getAddressLine1() {
-		return addressLine1;
+	public Address getBillingAddress() {
+		return billingAddress;
 	}
 
-	public void setAddressLine1(String addressLine1) {
-		this.addressLine1 = addressLine1;
+	public void setBillingAddress(Address billingAddress) {
+		this.billingAddress = billingAddress;
 	}
 
-	public String getAddressLine2() {
-		return addressLine2;
-	}
-
-	public void setAddressLine2(String addressLine2) {
-		this.addressLine2 = addressLine2;
-	}
-
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	public String getState() {
-		return state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
-	}
-
-	public String getZipCode() {
-		return zipCode;
-	}
-
-	public void setZipCode(String zipCode) {
-		this.zipCode = zipCode;
-	}
-
-	public Integer getVersion() {
-		return version;
-	}
-
-	public void setVersion(Integer version) {
-		this.version = version;
-	}
+//	public Address getShippingAddress() {
+//		return shippingAddress;
+//	}
+//
+//	public void setShippingAddress(Address shippingAddress) {
+//		this.shippingAddress = shippingAddress;
+//	}
 
 	public User getUser() {
 		return user;
@@ -152,20 +98,19 @@ public class Customer implements DomainObject {
 		this.user = user;
 		user.setCustomer(this);
 	}
-	
+
 	public void removeUser(User user) {
-        if (user != null) {
-        	user.setCustomer(null);
-        }
-        this.user = null;
-    }
+		if (user != null) {
+			user.setCustomer(null);
+		}
+		this.user = null;
+	}
 
 	@Override
 	public String toString() {
-		return "Customer [id=" + id + ", version=" + version + ", firstName=" + firstName + ", lastName=" + lastName
-				+ ", email=" + email + ", phoneNumber=" + phoneNumber + ", addressLine1=" + addressLine1
-				+ ", addressLine2=" + addressLine2 + ", city=" + city + ", state=" + state + ", zipCode=" + zipCode
-				+ "]";
+		return "Customer [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", phoneNumber="
+				+ phoneNumber + ", billingAddress=" + billingAddress + ", user=" + user + ", id=" + id + ", version="
+				+ version + ", dateCreated=" + dateCreated + ", lastUpdated=" + lastUpdated + "]";
 	}
 
 }
