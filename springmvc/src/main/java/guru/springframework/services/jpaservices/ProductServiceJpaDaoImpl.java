@@ -16,7 +16,7 @@ import guru.springframework.services.ProductService;
 @Service
 @Profile(value = { "jpadao", "jpadaotest" })
 public class ProductServiceJpaDaoImpl extends AbstractJpaDaoService implements ProductService {
-
+	
 	@Override
 	public List<Product> listAll() {
 		// Se crea uno por cada thread. No es thread safe
